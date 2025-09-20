@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
+from django.shortcuts import render
 
 
 def home(request):
@@ -20,12 +21,18 @@ def post_hello(request):
       return JsonResponse({"message": f"Hello, {name}!"})
     except json.JSONDecodeError:
       return JsonResponse({"error": "Invalid JSON format"}, status=400)
-  elif request.method == "GET":
-    return JsonResponse({
-      "info": "This is a POST endpoint for greeting users",
-      "usage": "Send POST request with JSON: {'name': 'YourName'}",
-      "example_response": {"message": "Hello, YourName!"}
-    })
   else:
-    return JsonResponse({"error": "Only GET and POST methods allowed"}, status=405)
+    return JsonResponse({"error": "POST method required"}, status=405)
 
+def inicial(request):
+  return render(request, 'inicial.html')
+
+def problema(request):
+  return render(request, 'problema.html')
+
+def solucao(request):
+  return render(request, 'solucao.html')
+
+def autor(request):
+  return render(request, 'autor.html')
+  

@@ -21,6 +21,10 @@ from hello import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('<str:name>/', views.hello2, name='hello2'),
+    path('ola/<str:name>/', views.hello2, name='hello2'),
     path('api/post_hello/', views.post_hello, name='post_hello'),
+    path('inicial/', views.inicial, name='inicial'),
+    path('problema/', views.problema, name='problema'),
+    path('solucao/', views.solucao, name='solucao'),
+    path('autor/', views.autor, name='autor'),
 ]
