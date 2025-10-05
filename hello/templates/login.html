@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Engenharia de Jogos - Login</title>
+    <style>
+        /* Estilos básicos para se parecer com a sua imagem */
+        body {
+            font-family: sans-serif;
+            background-color: #333;
+            color: white;
+        }
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            margin: 100px auto;
+            background-color: #2a2a2a;
+            border: 2px solid #555;
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #e67e22;
+        }
+        label, input, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        input {
+            background-color: #444;
+            border: 1px solid #666;
+            padding: 10px;
+            color: white;
+            border-radius: 4px;
+        }
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-continue {
+            background-color: #8b4513; /* Cor de madeira */
+            color: white;
+        }
+        .btn-start {
+            background-color: #e67e22; /* Laranja */
+            color: #333;
+        }
+        .messages {
+            list-style: none;
+            padding: 0;
+        }
+        .messages li.error {
+            color: #e74c3c;
+            background-color: #442020;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>A JORNADA DO DEV-HERÓI</h2>
+
+        {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <label for="username">Login:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="btn-continue">CONTINUE SEU PROGRESSO</button>
+        </form>
+
+        <button class="btn-start" onclick="location.href='#'">INICIE SUA JORNADA</button>
+    </div>
+
+</body>
+</html>
