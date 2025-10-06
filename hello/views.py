@@ -9,6 +9,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
+# Rest
+from django.contrib.auth.models import User
+from rest_framework import viewsets
+from .serializers import UserSerializer
+
+# Importando o jogador e o serializer
+from .models import Jogador
+from .serializers import JogadorSerializer
+
 
 def home(request):
   return HttpResponse("Hello, Django!")
@@ -16,6 +25,7 @@ def home(request):
 
 def hello2(request, name):
   return HttpResponse(f"Hello, {name}!")
+
 
 @csrf_exempt
 def post_hello(request):
@@ -29,52 +39,72 @@ def post_hello(request):
   else:
     return JsonResponse({"error": "POST method required"}, status=405)
 
+
 def inicial(request):
   return render(request, 'inicial.html')
+
 
 def problema(request):
   return render(request, 'problema.html')
 
+
 def solucao(request):
   return render(request, 'solucao.html')
 
+
 def autor(request):
   return render(request, 'autor.html')
+
 
 #Sistema de Login
 def login_view(request):
   # Se o formulário foi enviado (método POST)
   if request.method == 'POST':
-      # Pega o 'username' e a 'password' do formulário
-      # Os nomes 'username' e 'password' devem ser os mesmos dos atributos 'name' nos inputs do seu HTML
-      username_form = request.POST.get('username')
-      password_form = request.POST.get('password')
+    # Pega o 'username' e a 'password' do formulário
+    # Os nomes 'username' e 'password' devem ser os mesmos dos atributos 'name' nos inputs do seu HTML
+    username_form = request.POST.get('username')
+    password_form = request.POST.get('password')
 
-      # Autentica o usuário com as credenciais fornecidas
-      user = authenticate(request, username=username_form, password=password_form)
+    # Autentica o usuário com as credenciais fornecidas
+    user = authenticate(request,
+                        username=username_form,
+                        password=password_form)
 
-      # Verifica se a autenticação foi bem-sucedida
-      if user is not None:
-          # Se o usuário é válido, inicia a sessão para ele
-          login(request, user)
-          # Redireciona para a página principal do mapa do jogo após o login
-          # Vamos criar essa página depois. Por enquanto, pode ser um redirect para '/'
-          return redirect('mapa') # Usaremos um nome de URL para ser mais flexível
-      else:
-          # Se as credenciais forem inválidas, envia uma mensagem de erro
-          messages.error(request, 'Login ou senha inválidos.')
-          return redirect('login')
+    # Verifica se a autenticação foi bem-sucedida
+    if user is not None:
+      # Se o usuário é válido, inicia a sessão para ele
+      login(request, user)
+      # Redireciona para a página principal do mapa do jogo após o login
+      # Vamos criar essa página depois. Por enquanto, pode ser um redirect para '/'
+      return redirect('mapa')  # Usaremos um nome de URL para ser mais flexível
+    else:
+      # Se as credenciais forem inválidas, envia uma mensagem de erro
+      messages.error(request, 'Login ou senha inválidos.')
+      return redirect('login')
 
   # Se a requisição for GET, apenas mostra a página de login
   return render(request, 'login.html')
+
 
 def logout_view(request):
   logout(request)
   messages.success(request, 'Você saiu da sua conta com sucesso!')
   return redirect('login')
 
+
 # Futuramente, a view do mapa principal do seu jogo
 def mapa_view(request):
   # Aqui você vai adicionar a lógica para mostrar o mapa, progresso do herói, etc.
   # Por enquanto, apenas uma página simples.
   return render(request, 'mapa.html')
+
+
+# Rest
+class UserViewSet(viewsets.ModelViewSet):
+  queryset = User.objects.all().order_by('-date_joined')
+  serializer_class = UserSerializer
+
+
+class JogadorViewSet(viewsets.ModelViewSet):
+  queryset = Jogador.objects.all()
+  serializer_class = JogadorSerializer
