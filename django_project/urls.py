@@ -18,6 +18,13 @@ from django.contrib import admin
 from hello import views
 from django.urls import path, include
 
+from rest_framework import routers
+from hello import views
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'jogadores', views.JogadorViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
@@ -27,7 +34,11 @@ urlpatterns = [
     path('problema/', views.problema, name='problema'),
     path('solucao/', views.solucao, name='solucao'),
     path('autor/', views.autor, name='autor'),
-    path('login/', views.login_view, name='login'), # {% url 'login' %} nos templates
-    path('logout/', views.logout_view, name='logout'), # URL para fazer logout
-    path('mapa/', views.mapa_view, name='mapa'), # URL para o mapa principal do jogo
+    path('login/', views.login_view,
+         name='login'),  # {% url 'login' %} nos templates
+    path('logout/', views.logout_view, name='logout'),  # URL para fazer logout
+    path('mapa/', views.mapa_view,
+         name='mapa'),  # URL para o mapa principal do jogo
+    path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),  # Inclui as rotas da API
 ]
