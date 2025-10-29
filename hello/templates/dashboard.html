@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Bem-vindo ao Dashboard!</h1>
+
+    <p>Olá, {{ usuario.username }}!</p>
+
+    <p>Esta página só pode ser vista por usuários logados.</p>
+
+    <a href="{% url 'logout' %}">Sair (Logout)</a>
+</body>
+</html>

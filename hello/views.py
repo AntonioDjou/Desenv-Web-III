@@ -18,6 +18,8 @@ from .serializers import UserSerializer
 from .models import Jogador
 from .serializers import JogadorSerializer
 
+# Autenticação
+from django.contrib.auth.decorators import login_required
 
 def home(request):
   return HttpResponse("Hello, Django!")
@@ -92,7 +94,7 @@ def logout_view(request):
   return redirect('login')
 
 
-# Futuramente, a view do mapa principal do seu jogo
+# Futuramente, a view do mapa principal
 def mapa_view(request):
   # Aqui você vai adicionar a lógica para mostrar o mapa, progresso do herói, etc.
   # Por enquanto, apenas uma página simples.
@@ -108,3 +110,10 @@ class UserViewSet(viewsets.ModelViewSet):
 class JogadorViewSet(viewsets.ModelViewSet):
   queryset = Jogador.objects.all()
   serializer_class = JogadorSerializer
+
+
+# Dashboard
+@login_required
+def dashboard(request):
+  
+  return render(request, 'usuarios/dashboard.html')

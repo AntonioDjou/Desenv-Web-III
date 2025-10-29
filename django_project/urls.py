@@ -14,19 +14,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+"""
+URL configuration for django_project project.
+"""
 from django.contrib import admin
-from hello import views
 from django.urls import path, include
-
+from django.contrib.auth import views as auth_views  
 from rest_framework import routers
-from hello import views
 
+from hello import views  
+
+# Configuração do Roteador da API 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'jogadores', views.JogadorViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # --- Rotas Principais e da API ---
+    path('admin/', admin.site.urls),  # Apenas uma vez
     path('', views.home, name='home'),
     path('ola/<str:name>/', views.hello2, name='hello2'),
     path('api/post_hello/', views.post_hello, name='post_hello'),
@@ -34,11 +39,17 @@ urlpatterns = [
     path('problema/', views.problema, name='problema'),
     path('solucao/', views.solucao, name='solucao'),
     path('autor/', views.autor, name='autor'),
-    path('login/', views.login_view,
-         name='login'),  # {% url 'login' %} nos templates
-    path('logout/', views.logout_view, name='logout'),  # URL para fazer logout
-    path('mapa/', views.mapa_view,
-         name='mapa'),  # URL para o mapa principal do jogo
-    path('admin/', admin.site.urls),
+    path('mapa/', views.mapa_view, name='mapa'),
     path('api/', include(router.urls)),  # Inclui as rotas da API
+
+    # 1. Rota para login: /usuarios/login/
+    path('usuarios/login/',
+         auth_views.LoginView.as_view(template_name='usuarios/login.html'),
+         name='login'),
+
+    # 2. Rota para dashboard: /usuarios/dashboard/
+    path('usuarios/dashboard/', views.dashboard, name='dashboard'),
+
+    # 3. Rota para logout: /usuarios/logout/
+    path('usuarios/logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]

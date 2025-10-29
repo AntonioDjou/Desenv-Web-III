@@ -27,7 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
-    "https://" + domain for domain in os.environ.get("REPLIT_DOMAINS", "").split(',') if domain
+    'https://*.replit.dev',  # Confia na interface de desenvolvimento do Replit
+    'https://*.repl.co',  # Confia no site "publicado" do Replit
+    'https://*.riker.repl.it:5000'
 ]
 
 # Application definition
@@ -129,3 +131,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# --- Configurações de URL de Autenticação ---
+LOGIN_URL = '/usuarios/login/'
+LOGIN_REDIRECT_URL = '/usuarios/dashboard/'
+LOGOUT_REDIRECT_URL = '/usuarios/login/'
